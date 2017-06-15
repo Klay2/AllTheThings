@@ -8,10 +8,16 @@ import com.zaxxer.hikari.HikariDataSource;
 public class RestControllerConfig{
 
 
-
-
+  //bean for root endpoint currently set to test endpoint
   @Bean
-  public DataSource getDataSource() throws SQLException{
+  public StaticEndpoint setRootEndpoint(){
+    return new TestRoot();
+  }
+
+
+  //bean for setting up hikari cp for Datasource in restController
+  @Bean
+  public DataSource setDataSource() throws SQLException{
     @Value("${spring.datasource.url}")//grabs value from application.properties
     String databaseURL;
     @Value("${spring.datasource.username}")

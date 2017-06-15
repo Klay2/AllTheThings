@@ -14,27 +14,23 @@ import java.sql.*;
 public class RestController{
 
   @Autowired
+  private StaticEndpoint index;
+
+  @Autowired
   private DataSource dataSource;
 
-  @RequestMapping("/")
-  String getIndex(){
-    return "hello thar it works this far!"
+
+  public void setDataSource(DataSource dataSourceIn){
+    this.dataSource = dataSourceIn;
   }
 
-  @RequestMapping("/dbTest")
-    String dbTest(){
-      String testStmtStr = "SELECT * FROM testing WHERE id = ?";
+  @RequestMapping("/")
+  String indexEndpoint(){
+    return index.getResponse("getBody", @RequestHeader Map<String, String>);
+  }
 
-      try(Connection testConn = dataSource.getConnection()){
-        PreparedStatement testStmt = testConn.prepareStatement(testStmtStr);
-        testStmt.setString(1, "sammich");
-        ResultSet testResults = testStmt.executeQuery();
-        return testResults.getString(1);
-      } catch (Exception e){
-        return e.getMessage();
-      }
 
-    }
+
 
 
 
