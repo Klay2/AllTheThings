@@ -1,10 +1,16 @@
 package allthethings.model;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
+@JsonTypeInfo(use = Id.CLASS,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type")
 
 public class User{
 
-  private String userID;
-  private String userName;
+  private String userID;//combo of letters and numbers
+  private String userName;//userName id from facebook or email or whatever
   //more stuff needed?? idk..
 
   public User(String idIn, String userNameIn){

@@ -1,5 +1,11 @@
 package allthethings.model;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
+@JsonTypeInfo(use = Id.CLASS,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type")
 
 public class Thing{
   private String name;
@@ -18,23 +24,13 @@ public class Thing{
   //sharedWith CAN be null
   //strDat CAN be null
 
-  //constructor for a non shared/collab thing
-  public Thing(String nameIn, User ownerIn, boolean pubIn){
-    this.name = nameIn;
-    this.strDat = "";
-    this.owner = ownerIn;
-    this.sharedWith = null;
-    this.shared =false;
-    this.pub = pubIn;
-    this.collab = false;
-  }
 
   //constructor for a shared/collab thing
   public Thing(String nameIn, User ownerIn,
   List<User>sharedWithIn, boolean pubIn, boolean sharedIn,
-   boolean collabIn){
+   boolean collabIn, String strDatIn){
     this.name = nameIn;
-    this.strDat = "";
+    this.strDat = strDatIn;
     this.owner = ownerIn;
     this.sharedWith = sharedWithIn;
     this.shared =sharedIn;
@@ -45,7 +41,7 @@ public class Thing{
   public void setStrDat(String strIn){
     this.strDat = strIn;
   }
-  //for later setting shareing
+  //for later setting shareing with full list
   public void setSharedWith(List<User> userListIn,
   boolean sharedIn, boolean collabIn){
     this.sharedWith = userListIn;
@@ -53,7 +49,34 @@ public class Thing{
     this.collab = collabIn;
   }
 
-  
+  public String getName(){
+    return this.name;
+  }
+
+  public String getStrDat(){
+    return this.strDat;
+  }
+
+  public Owner getOwner(){
+    return this.owner;
+  }
+
+  public List<User> getSharedList(){
+    return this.sharedWith;
+  }
+
+  public boolean getPublic(){
+    return this.pub;
+  }
+
+  public boolean getShared(){
+    return this.shared;
+  }
+
+  public boolean getCollab(){
+    return this.collab;
+  }
+
 
 
 

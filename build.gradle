@@ -41,7 +41,9 @@ dependencies{
   compile 'org.springframework.boot:spring-boot-starter-web'
   compile 'org.springframework.boot:spring-boot-starter-security'
   compile 'org.postgresql:postgresql:42.1.1.jre7'
+  testCompile 'com.fasterxml.jackson.core:jackson-core:2.8.9'
   compile 'com.zaxxer:HikariCP:2.6.2'
+
   testCompile 'org.springframework.boot:spring-boot-starter-test'
   //providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }

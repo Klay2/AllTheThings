@@ -1,3 +1,5 @@
+package allthethings.model;
+
 public class IntAttribute extends Attribute{
 
 
@@ -6,12 +8,9 @@ public class IntAttribute extends Attribute{
 
 
   public IntAttribute(User ownerIn, String nameIn, String thingNameIn,
-  int typeIn, boolean pubIn, boolean collabIn, int intDatIn)throws Exception){
+  int typeIn, boolean pubIn, boolean collabIn, int intDatIn){
 
-    if(intDatIn < 0){throw new Exception e("invalid intData attribute" +
-      " creation");}
-    if(typeIn != 1){throw new Exception e("invalid type intData attribute" +
-        " creation");}
+
 
     super(ownerIn, nameIn, thingNameIn, typeIn, pubIn collabIn);
     this.intData = intDatIn;
@@ -23,8 +22,7 @@ public class IntAttribute extends Attribute{
     return this.intData;
   }
 
-  public setIntData(int datIn)throws Exception{
-    if(datIn <0){throw new Exception e("invalid int data setInt attribute");}
+  public setIntData(int datIn){
     this.intData = datIn;
   }
 

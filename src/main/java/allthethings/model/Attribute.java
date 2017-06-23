@@ -1,6 +1,20 @@
 package allthethings.model;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
-public class Attribute{//declare this as abstract, there are no base
+@JsonTypeInfo(use = Id.CLASS,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type")
+
+@JsonSubTypes({
+  @Type(value = DoublAttribute.class),
+  @Type(value = IntAttribute.class),
+  @Type(value = StrAttribute.class),
+})
+
+public abstract class Attribute{//declare this as abstract, there are no base
   //attributes
 
   private String name;
@@ -18,23 +32,10 @@ public class Attribute{//declare this as abstract, there are no base
   //if typeIn does not fit type exception is thrown, enforces rules on creation
   //int type constructor
   public Attribute(User ownerIn, String nameIn, String thingNameIn, int typeIn,
-    boolean pubIn, boolean collabIn)throws Exception{
-      //guard statements
-      if(ownerIn == null){
-        throw new Exception e("null owner Attribute Creation");
-      }
-      if(nameIn == null || nameIn.length() <1){
-        throw new Exception e("null or empty name Attribute Creation");
-      }
-      if(thingNameIn == null || thingNameIn.length() < 1){
-        throw new Exception e("null or empty thingName Attribute Creation");
-      }
-      if(typeIn < 1 || typeIn > 4){
-        throw new Exception e("incorrect type range Attribute Creation");
-      }
+    boolean pubIn, boolean collabIn){
 
-      this.name = nameIn;
       this.owner = ownerIn;
+      this.name = nameIn;
       this.parentThingName = thingNameIn;
       this.type = typeIn;
       this.pub = pubIn;
