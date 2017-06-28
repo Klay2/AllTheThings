@@ -12,7 +12,7 @@ public class QueryEndpoint  {
     this.query = queryIn;
   }
 
-  public String getResponse(String body, Map<String, String> headers){
+  public String getResponse(String body, Map<String, String> headers)throws Exception{
     //pump stuff into query object
     //get results and return string result
     return "queryEndpoint";

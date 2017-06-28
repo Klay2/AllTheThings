@@ -12,7 +12,7 @@ public class Root extends QueryEndpoint{
     super(queryIn);
   }
 
-  public String getResponse(String body, Map<String, String> headers) throws Exception{
+  public String getResponse(String body, Map<String, String> headers)throws Exception {
 
     if(body == null){throw new Exception("null body argument root endpoint");}
     if(headers == null){throw new Exception("null header map root endpoint");}
@@ -25,6 +25,7 @@ public class Root extends QueryEndpoint{
     ArrayList<String> queryParameters = new ArrayList<String>();
     queryParameters.add(headers.get("wat5"));
     result = super.getQuery().getQueryResult(queryParameters);
+    return "checkedtoken";
 
 
   }

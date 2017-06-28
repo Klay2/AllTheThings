@@ -7,12 +7,12 @@ package allthethings.controller;
 //and output an array of these.. this makes any query handler easy to mock
 //a mock query handler doesnt have to touch any jdbc api
 //also each endpoint controller doesnt have to touch any jdbc api
-class QueryResponseFieldContainer{
+class FieldContainer{
 
   private String strDat;
   private boolean boolDat;
 
-  QueryResponseFieldContainer(){
+  FieldContainer(){
     this.strDat = null;
     this.boolDat = false;
   }
@@ -29,7 +29,7 @@ class QueryResponseFieldContainer{
     return strDat;
   }
 
-  String getBoolDat(){
+  boolean getBoolDat(){
     return boolDat;
   }
 

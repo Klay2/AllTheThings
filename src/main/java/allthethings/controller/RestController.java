@@ -28,7 +28,7 @@ public class RestController{
   }
 
   @RequestMapping("/")
-  String indexEndpoint(@RequestHeader Map<String, String> headers){
+  String indexEndpoint(@RequestHeader Map<String, String> headers)throws Exception{
     return index.getResponse("getBody", headers );
   }
 
