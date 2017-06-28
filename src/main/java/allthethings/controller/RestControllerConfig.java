@@ -1,7 +1,8 @@
 package allthethings.controller;
 import org.springframework.context.annotation.*;
+import java.sql.DataSource;
 import com.zaxxer.hikari.HikariDataSource;
-import com.zaxxer.hikari.HikariDataSource;
+import com.zaxxer.hikari.HikariConfig;
 
 
 @Configuration

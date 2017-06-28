@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
+
 @JsonTypeInfo(use = Id.CLASS,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type")
@@ -47,7 +48,7 @@ public abstract class Attribute{//declare this as abstract, there are no base
     return this.name;
   }
 
-  public Owner getAttOwner(){
+  public User getAttOwner(){
     return this.owner;
   }
 
@@ -67,11 +68,11 @@ public abstract class Attribute{//declare this as abstract, there are no base
     return this.collab;
   }
 
-  public setPublic(boolean pubIn){
+  public void setPublic(boolean pubIn){
     this.pub = pubIn;
   }
 
-  public setCollab(boolean collabIn){
+  public void setCollab(boolean collabIn){
     this.collab = collabIn;
   }
 

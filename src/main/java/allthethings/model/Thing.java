@@ -57,7 +57,7 @@ public class Thing{
     return this.strDat;
   }
 
-  public Owner getOwner(){
+  public User getOwner(){
     return this.owner;
   }
 

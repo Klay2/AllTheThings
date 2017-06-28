@@ -1,4 +1,8 @@
+package allthethings.controller;
 
+import java.sql.DataSource;
+import java.util.ArrayList;
+import java.util.List;
 
 //class for handling a query and outputting some result
 //result is an array list of rows

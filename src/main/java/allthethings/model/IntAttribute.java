@@ -10,9 +10,7 @@ public class IntAttribute extends Attribute{
   public IntAttribute(User ownerIn, String nameIn, String thingNameIn,
   int typeIn, boolean pubIn, boolean collabIn, int intDatIn){
 
-
-
-    super(ownerIn, nameIn, thingNameIn, typeIn, pubIn collabIn);
+    super(ownerIn, nameIn, thingNameIn, typeIn, pubIn, collabIn);
     this.intData = intDatIn;
 
   }
@@ -22,7 +20,7 @@ public class IntAttribute extends Attribute{
     return this.intData;
   }
 
-  public setIntData(int datIn){
+  public void setIntData(int datIn){
     this.intData = datIn;
   }
 

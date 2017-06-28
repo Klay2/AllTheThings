@@ -7,10 +7,10 @@ public class DoublAttribute extends Attribute{
 
 
 
-  public IntAttribute(User ownerIn, String nameIn, String thingNameIn,
+  public DoublAttribute(User ownerIn, String nameIn, String thingNameIn,
   int typeIn, boolean pubIn, boolean collabIn, Double doublDatIn){
 
-    super(ownerIn, nameIn, thingNameIn, typeIn, pubIn collabIn);
+    super(ownerIn, nameIn, thingNameIn, typeIn, pubIn, collabIn);
     this.doublData = doublDatIn;
 
   }
@@ -20,7 +20,7 @@ public class DoublAttribute extends Attribute{
     return this.doublData;
   }
 
-  public setDoublData(Double datIn){
+  public void setDoublData(Double datIn){
 
     this.doublData = datIn;
   }

@@ -11,7 +11,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-public static void main(String[] args){
+
+public class JacksonTest{
+
+  @Test
+public static void runTest(){
   ObjectMapper mapper = new ObjectMapper();
   mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
 
@@ -43,10 +47,5 @@ public static void main(String[] args){
 
   System.out.println(jsonOut);
 
-
-
-
-
-
-
+}
 }

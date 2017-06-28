@@ -1,7 +1,9 @@
+package allthethings.controller;
 
+import java.util.Map;
 //endpoint controller that uses a database Query
 //may end up using multiple queries at some point..
-public class QueryEndpoint extends Endpoint {
+public class QueryEndpoint  {
 
   //possibly extend to list of queries
   private Query query;

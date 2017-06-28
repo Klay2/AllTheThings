@@ -1,9 +1,11 @@
+package allthethings.controller;
+import java.util.Map;
 
 //endpoint that doesn't do any database Queries
-public  class StaticEndpoint extends Endpoint{
+public  class StaticEndpoint {
 
   //response to return may be multiple responses
-  Endpoint(){
+  StaticEndpoint(){
 
   }
 
