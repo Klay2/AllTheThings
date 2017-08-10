@@ -14,7 +14,7 @@ public class StreamQuery{
 //TODO: consider a que implemnted by linked lists instead better memory
 //efficiency and dont need random access of elements
 
-  public void getResponse(OutputStream streamIn, Queue<String> paramsIn){
+  public void getResponse(OutputStream streamIn, ArrayList<String> paramsIn){
 
     //TODO:  finish this method that does database query and returns
     //the json from the db writes it to the streamOut

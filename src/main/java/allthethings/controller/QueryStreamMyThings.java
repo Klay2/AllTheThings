@@ -3,7 +3,7 @@ package allthethings.controller;
 
 //streaming out query(s) for /MyThings endpoint to get all things owned by
 //the main user and all attributes owned by the main user
-public class QueryStreamMyThings extends StreamQuery{
+public class QueryStreamMyThings extends StreamingResponseBody{
 
 
 
@@ -17,6 +17,8 @@ public class QueryStreamMyThings extends StreamQuery{
   //TODO: CHANGE TO COLUMN OF JSON
   private static final int THING_JSON_COLUMN = 4;
   private static final int ATTRIBUTE_JSON_COLUMN = 4;
+  private String userId;
+  private DataSource datSrc;
 
   //query to get things.. modify so that it does NOT include collab things
   //max 150 things each with 8 max attributes will keep under 1mb memory
@@ -45,22 +47,31 @@ public class QueryStreamMyThings extends StreamQuery{
 
 
 
-  public QuerySTreamMyThings(DataSource datSrcIn){
-    super(datSrcIn);
+  public QuerySTreamMyThings(DataSource datSrcIn, String userIdIn){
+    this.datSrc = datSrcIn;
+    this.userId = userIdIn;
+
   }
 
 
-  public void getResponse(OutputStream streamIn, Queue<String> paramsIn){
 
-    //TODO:  finish this method that does database query and returns
-    //the json from the db writes it to the streamOut
-    Connection conn = this.getDataSource().getConnection();
-    String user = paramsIn.remove();
+  //Writes out a response from the database for things and attributes
+  //that are non collaborated owned by the userid given in the
+  //array list argument
+  //output format is [ THINGS, ATTRIBUTES ]
+  //if there is no thing or attribute a null is printed
+  //will end up throwing stuff
+  public void writeTo(OutputStream streamIn){
+
+    //TODO:
+    //needs try catches
+    Connection conn = this.datSrc.getConnection();
     PreparedStatement getThings = conn.prepareStatement(queryStrThings);
     //the fetch size has to be based on max allowed at 1 time determined by
     //the client end I think
     getThings.setFetchSize(MAX_FETCH_SIZE_THINGS);
-    getThings.setString(1,user);
+    getThings.setString(1,this.userId);
+
 
     ResultSet thingResult = getThings.executeQuery();
 
@@ -69,8 +80,7 @@ public class QueryStreamMyThings extends StreamQuery{
       //empty
       out.write(new String("null").toBytes());
     }else{
-      //TODO:  write all things out to string
-      boolean first = true;
+      boolean first = true;//TODO: CONSIDER DO WHILE OR SOMTHING
       while(thingResult.next()){
         if(!first){
           out.write(new String(", ").toBytes());
@@ -79,10 +89,10 @@ public class QueryStreamMyThings extends StreamQuery{
         first = false;
       }
     }
-    //TODO: get and write all attributes...
     PreparedStatement getAttributes = conn.prepareStatement(queryStrAtts);
     getAttributes.setFetchSize(MAX_FETCH_SIZE_ATTRIBUTES);
-    getAttributes.setString(1,user);
+    getAttributes.setString(1,this.userId);
+    getAttributes.setString(2,this.userId);
 
     ResultSet attResult = getAttributes.executeQuery();
 
@@ -91,7 +101,7 @@ public class QueryStreamMyThings extends StreamQuery{
     }else{
       while(attResult.next()){
         out.write(new String(", ").toBytes());
-        out.write(attResult.getString(ATTRIBUTE_JSON_COLUMN).toBytes()); //TODO: CHANGE TO COLUMN TO JSON
+        out.write(attResult.getString(ATTRIBUTE_JSON_COLUMN).toBytes());
       }
     }
     out.write(new String(" ]").toBytes());

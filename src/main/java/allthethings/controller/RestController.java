@@ -22,17 +22,38 @@ public class RestController{
   @Autowired
   private DataSource dataSource;
 
+  @Autowired
+  private QueryCheckToken tokenCheck;
+
 
   public void setDataSource(DataSource dataSourceIn){
     this.dataSource = dataSourceIn;
   }
 
   @RequestMapping("/")
-  String indexEndpoint(@RequestHeader Map<String, String> headers)throws Exception{
+  public String indexEndpoint(@RequestHeader Map<String, String> headers)throws Exception{
     return index.getResponse("getBody", headers );
   }
 
 
+
+  @RequestMapping(path = "/mythings", method = RequestMethod.GET )
+  public StreamingResponseBody indexEndpoint(@RequestHeader Map<String, String> headers)throws Exception{
+    //TODO: try catches and responses
+
+    if(!headers.contains("token") || headers.get("token") == null ){//guard statment does not have sectoken
+      //TODO:  error unauthorized do whatever for that
+      return null;
+    }
+    ArrayList<String> tokenResult = tokenCheck.getTokenResult(headers.get("token"), this.dataSource);
+    if(tokenResult.get(0).equals("false")){
+        //TODO: error unauthorized do whatever
+        return null;
+    }
+    String userId = tokenResult.get(1);
+    return new QueryStreamMyThings(this.dataSource , userId);
+
+  }
 
 
 

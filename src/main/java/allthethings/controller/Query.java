@@ -21,11 +21,14 @@ public class Query{
   //to use with PreparedStatement
   //returns a list of result rows
   //each row is an arraylist of Field Containers
-  List<ArrayList<FieldContainer>> getQueryResult(ArrayList<String> params){
+  ArrayList<ArrayList<String>> getQueryResult(ArrayList<String> params){
       return null;
 
   }
 
+  protected DataSource getDataSource(){
+    return this.datSrc;
+  }
 
 
 
