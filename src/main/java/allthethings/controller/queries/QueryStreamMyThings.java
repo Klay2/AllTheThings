@@ -1,12 +1,22 @@
-package allthethings.controller;
+package allthethings.controller.queries;
+import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.nio.charset.Charset;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+import java.io.OutputStreamWriter;
+import javax.sql.*;
+
 
 
 //streaming out query(s) for /MyThings endpoint to get all things owned by
 //the main user and all attributes owned by the main user
-public class QueryStreamMyThings extends StreamingResponseBody{
+public class QueryStreamMyThings implements StreamingResponseBody{
 
 
-
+  //TODO: consider seperating db query and results from stream writing logic
+  // the seperation would make updating to different database much easier
   //hard limit on user to allow performance client side
   //also keeps memory used per request to ~1MB when holding WHOLE result set
   //150things
@@ -25,35 +35,17 @@ public class QueryStreamMyThings extends StreamingResponseBody{
   //per request... IFF results are streamed out and only result set is kept
 
   //query to get things from the user which are NOT collabs
-  private static final String queryStrThings =
-    "SELECT things.json FROM things" +
-    " LEFT OUTER JOIN collabs" +
-    " ON (things.userid = collabs.ownerid" +
-    " AND things.thingname = collabs.thingname)" +
-    " WHERE things.userid = ?" +
-    " AND collabs.sharedid IS NULL";
+  private String queryStrThings = "SELECT things.json FROM things LEFT OUTER JOIN collabs ON (things.userid = collabs.ownerid AND things.thingname = collabs.thingname) WHERE things.userid = ? AND collabs.sharedid IS NULL";
 
   //query to get all a user's attributes excluding attributes
   //from collab things.. MAY OR MAY NOT WORK MUST TEST
-  private static final String queryStrAtts =
-    "SELECT json FROM attributes WHERE" +
-    " user = ? AND collab = false";
-    "SELECT attributes.json FROM attributes" +
-    " LEFT OUTER JOIN collabs" +
-    " ON (attributes.thingname = collabs.thingname)" +
-    " WHERE attributes.userid = ?" +
-    " AND collabs.sharedid IS NULL";
+  private String queryStrAtts = "SELECT attributes.json FROM attributes JOIN (Select things.thingname FROM things LEFT OUTER JOIN collabs ON (things.userid = collabs.ownerid AND things.thingname = collabs.thingname) WHERE things.userid = ? AND collabs.sharedid IS NULL) ON (things.thingname = attributes.thingname) WHERE attributes.userid = ?";
 
-
-
-
-  public QuerySTreamMyThings(DataSource datSrcIn, String userIdIn){
+  public void QueryStreamMyThings(DataSource datSrcIn, String userIdIn){
     this.datSrc = datSrcIn;
     this.userId = userIdIn;
 
   }
-
-
 
   //Writes out a response from the database for things and attributes
   //that are non collaborated owned by the userid given in the
@@ -63,8 +55,7 @@ public class QueryStreamMyThings extends StreamingResponseBody{
   //will end up throwing stuff
   public void writeTo(OutputStream streamIn){
 
-    //TODO:
-    //needs try catches
+    //needs try catches..no it doesnt.. all errors thrown to controller..
     Connection conn = this.datSrc.getConnection();
     PreparedStatement getThings = conn.prepareStatement(queryStrThings);
     //the fetch size has to be based on max allowed at 1 time determined by
@@ -74,18 +65,19 @@ public class QueryStreamMyThings extends StreamingResponseBody{
 
 
     ResultSet thingResult = getThings.executeQuery();
+    OutputStreamWriter out = new OutputStreamWriter(streamIn,"UTF-8");
 
-    out.write(new String("[ ").toBytes());//openning of array
+    out.write("[ ");//openning of array
     if(thingResult.isBeforeFirst() == false){
       //empty
-      out.write(new String("null").toBytes());
+      out.write("null");
     }else{
-      boolean first = true;//TODO: CONSIDER DO WHILE OR SOMTHING
+      boolean first = true;
       while(thingResult.next()){
         if(!first){
-          out.write(new String(", ").toBytes());
+          out.write(", ");
         }
-        out.write(thingResult.getString(THING_JSON_COLUMN).toBytes());
+        out.write(thingResult.getString(THING_JSON_COLUMN));
         first = false;
       }
     }
@@ -97,16 +89,16 @@ public class QueryStreamMyThings extends StreamingResponseBody{
     ResultSet attResult = getAttributes.executeQuery();
 
     if(attResult.isBeforeFirst() == false){
-      out.write(new String(", null").toBytes());
+      out.write(", null");
     }else{
       while(attResult.next()){
-        out.write(new String(", ").toBytes());
-        out.write(attResult.getString(ATTRIBUTE_JSON_COLUMN).toBytes());
+        out.write(", ");
+        out.write(attResult.getString(ATTRIBUTE_JSON_COLUMN));
       }
     }
-    out.write(new String(" ]").toBytes());
+    out.write(" ]");
 
-    out.flush();
+    out.close();
 
   }
 }

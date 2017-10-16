@@ -1,8 +1,16 @@
-buildscript {
+
+
+
+plugins{
+  id 'org.springframework.boot' version '1.5.7.RELEASE'
+  id 'java'
+
+}
+
+
   ext {
         springBootVersion = '2.0.0.BUILD-SNAPSHOT'
     }
-
 
 	repositories {
     jcenter()
@@ -12,14 +20,32 @@ buildscript {
 	}
 
 	dependencies {
-		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+	
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-security'
+    compile 'org.postgresql:postgresql:42.1.1.jre7'
+    compile 'com.zaxxer:HikariCP:2.6.2'
+
+    //testCompile 'com.fasterxml.jackson.core:jackson-core:2.8.9'
+    testCompile gradleTestKit()
+    testCompile 'junit:junit:4.12'
+    //testCompile 'org.springframework.boot:spring-boot-starter-test'
+    //providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
 	}
+
+
+
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '4.2'
 }
 
-
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
+task hello{
+  doLast{
+    println 'Hello World!'
+  }
+}
 
 //tag::jar or war or whatever
 jar {
@@ -27,27 +53,7 @@ jar {
   version = '0.1.0'
 }
 
-//repos
-repositories {
-    jcenter()
-    mavenCentral()
-    maven { url "http://repo.spring.io/snapshot"}
-    maven { url "http://repo.spring.io/milestone"}
 
-}
 
-//dependencies
-dependencies{
-  compile 'org.springframework.boot:spring-boot-starter-web'
-  compile 'org.springframework.boot:spring-boot-starter-security'
-  compile 'org.postgresql:postgresql:42.1.1.jre7'
-  compile 'com.zaxxer:HikariCP:2.6.2'
-
-  testCompile 'com.fasterxml.jackson.core:jackson-core:2.8.9'
-  testCompile gradleTestKit()
-  testCompile 'junit:junit:4.12'
-  //testCompile 'org.springframework.boot:spring-boot-starter-test'
-  //providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-}
 //sourceCompatibility = 1.8
 //targetCompatibility = 1.8
