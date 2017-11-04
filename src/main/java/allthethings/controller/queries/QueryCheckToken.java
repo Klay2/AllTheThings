@@ -1,5 +1,6 @@
 package allthethings.controller.queries;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
@@ -21,16 +22,20 @@ public class QueryCheckToken{
     "FROM tokens "+
     "WHERE tokenid = ?";
 
-    public QueryCheckToken(){
-
-    }
+  private DataSource datSrc;
 
 
-  String[] getTokenResult(String tokenid, DataSource datSrcIn){
+
+  public QueryCheckToken(DataSource datSrcIn){
+      this.datSrc = datSrcIn;
+  }
+
+
+public  String[] getTokenResult(String tokenid) throws SQLException{
     boolean validResult = false;
     String userId = "";
 
-    Connection conn = datSrcIn.getConnection();
+    Connection conn = datSrc.getConnection();
     PreparedStatement checkToken = conn.prepareStatement(checkTokenStr);
     //in case there is more than 1 will not crash the backend
     //would never be more than 1 unless there were an attack

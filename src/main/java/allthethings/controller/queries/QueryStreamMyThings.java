@@ -3,6 +3,7 @@ import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.nio.charset.Charset;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import java.io.OutputStreamWriter;
@@ -41,7 +42,7 @@ public class QueryStreamMyThings implements StreamingResponseBody{
   //from collab things.. MAY OR MAY NOT WORK MUST TEST
   private String queryStrAtts = "SELECT attributes.json FROM attributes JOIN (Select things.thingname FROM things LEFT OUTER JOIN collabs ON (things.userid = collabs.ownerid AND things.thingname = collabs.thingname) WHERE things.userid = ? AND collabs.sharedid IS NULL) ON (things.thingname = attributes.thingname) WHERE attributes.userid = ?";
 
-  public void QueryStreamMyThings(DataSource datSrcIn, String userIdIn){
+  public QueryStreamMyThings(DataSource datSrcIn, String userIdIn){
     this.datSrc = datSrcIn;
     this.userId = userIdIn;
 
@@ -52,10 +53,11 @@ public class QueryStreamMyThings implements StreamingResponseBody{
   //array list argument
   //output format is [ THINGS, ATTRIBUTES ]
   //if there is no thing or attribute a null is printed
-  //will end up throwing stuff
-  public void writeTo(OutputStream streamIn){
+  //TODO:  SEPERATE QUERY AND DB LOGIC OUT
+  public void writeTo(OutputStream streamIn) {//TODO: cant throw exception..whatdo?
 
     //needs try catches..no it doesnt.. all errors thrown to controller..
+    try{//temporary
     Connection conn = this.datSrc.getConnection();
     PreparedStatement getThings = conn.prepareStatement(queryStrThings);
     //the fetch size has to be based on max allowed at 1 time determined by
@@ -99,6 +101,9 @@ public class QueryStreamMyThings implements StreamingResponseBody{
     out.write(" ]");
 
     out.close();
+  }catch (Exception e){
+    //do nothing for now
+  }
 
   }
 }

@@ -7,6 +7,9 @@ plugins{
 
 }
 
+springBoot {
+  mainClass = "allthethings.Application"
+}
 
   ext {
         springBootVersion = '2.0.0.BUILD-SNAPSHOT'
@@ -20,7 +23,7 @@ plugins{
 	}
 
 	dependencies {
-	
+
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.postgresql:postgresql:42.1.1.jre7'

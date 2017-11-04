@@ -55,13 +55,14 @@ public class MainController{
       //no security token in headers
       throw new Forbidden403Exception();
     }
-    String[] tokenResult = tokenCheck.getTokenResult(headers.get("token"), this.dataSource);
+    String[] tokenResult = tokenCheck.getTokenResult(headers.get("token"));
     if(tokenResult[0].equals("false")){
         //token not in database
         throw new Forbidden403Exception();
     }
     String userId = tokenResult[1];//get userid from token
-    return new QueryStreamMyThings(this.dataSource , userId);
+    QueryStreamMyThings myThingsQ = new QueryStreamMyThings(this.dataSource , userId);
+    return myThingsQ;
 
   }
 
