@@ -1,5 +1,8 @@
 package allthethings.controller;
 
+import allthethings.controller.queries.QueryCheckToken;
+import allthethings.mockcontroller.MockCheckToken;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -19,7 +22,7 @@ import java.sql.SQLException;
 @SpringBootApplication
 public class Application{
 
-
+/*
   @Bean
   public DataSource setDataSource(String databaseURL, String databaseUser, String databasePass) throws SQLException{
 
@@ -35,6 +38,12 @@ public class Application{
 
     return new HikariDataSource(hConfig);
   }
+*/
+
+@Bean
+public QueryCheckToken setCheckToken(){
+  return new MockCheckToken(null);
+}
 
   public static void Main(String[] args) throws Exception{
     SpringApplication.run(MainController.class, args);

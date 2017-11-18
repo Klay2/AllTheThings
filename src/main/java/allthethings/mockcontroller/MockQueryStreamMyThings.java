@@ -28,7 +28,7 @@ public class MockQueryStreamMyThings extends QueryStreamMyThings{
     deliverables[3] = att2Thing1;
     deliverables[4] = att1Thing2;
     deliverables[5] = att2Thing2;
-    try{//try with resources 
+    try{//try with resources
     OutputStreamWriter out = new OutputStreamWriter(streamIn, "UTF-8");//throws UnsupportedEncodingException
     //exception while writing, attempt to write to stream then close
     out.write("[ \"numthings\": \"2\", \"numattributes\": \"4\", ");//writing can throw IOException

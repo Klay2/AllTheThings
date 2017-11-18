@@ -16,16 +16,15 @@ springBoot {
     }
 
 	repositories {
-    jcenter()
     mavenCentral()
-		maven { url 'https://repo.spring.io/libs-snapshot' }
-    maven { url 'https://repo.spring.io/milesone'}
+		//maven { url 'https://repo.spring.io/libs-snapshot' }
+    //maven { url 'https://repo.spring.io/milesone'}
 	}
 
 	dependencies {
-
+    //compile 'org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-web'
-    compile 'org.springframework.boot:spring-boot-starter-security'
+    //compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.postgresql:postgresql:42.1.1.jre7'
     compile 'com.zaxxer:HikariCP:2.6.2'
 

@@ -2,6 +2,7 @@
 package allthethings.controller;
 import allthethings.controller.exceptions.*;
 import allthethings.controller.queries.*;
+import allthethings.mockcontroller.MockQueryStreamMyThings;
 
 //spring stuff
 import org.springframework.web.bind.annotation.RestController;
@@ -28,18 +29,19 @@ public class MainController{
 
   //@Autowired
 //  private QueryEndpoint index;
-
+  /*
   @Autowired
   private DataSource dataSource;
-
+  */
   @Autowired
   private QueryCheckToken tokenCheck;
 
 
+/*
   public void setDataSource(DataSource dataSourceIn){
     this.dataSource = dataSourceIn;
   }
-
+*/
   @RequestMapping("/")
   public String indexEndpoint(@RequestHeader Map<String, String> headers)throws Exception{
     return "index here";
@@ -61,7 +63,7 @@ public class MainController{
         throw new Forbidden403Exception();
     }
     String userId = tokenResult[1];//get userid from token
-    QueryStreamMyThings myThingsQ = new QueryStreamMyThings(this.dataSource , userId);
+    QueryStreamMyThings myThingsQ = new MockQueryStreamMyThings(null, null);
     return myThingsQ;
 
   }
