@@ -4,10 +4,12 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.util.LinkedList;
 import javax.sql.*;
 
 
-
+//handles the jdbc api layer query to get a token result
+//there is only 1 result so it returns 1 row which is a string[]
 public class QueryCheckToken{
 
 
@@ -16,6 +18,7 @@ public class QueryCheckToken{
   private static final int LOGOUT_COLUMN = 4;
   private static final int USERID_COLUMN = 2;
   private static final long MAX_SESSION_TIME = 28800000000L;//8 hours arbitrary
+  private static final int RESULT_SIZE = 3;//userid timestamp isLoggedOut/ add more?
 
   private static final String checkTokenStr =
     "SELECT userid , datetime " +
@@ -30,40 +33,40 @@ public class QueryCheckToken{
       this.datSrc = datSrcIn;
   }
 
+// need userid, timestamp, boolean isLoggedOut.. maybe more later like facebook token
+public LinkedList<String[]> getTokenResult(String tokenid) throws SQLException{
 
-public  String[] getTokenResult(String tokenid) throws SQLException{
-    boolean validResult = false;
-    String userId = "";
 
+    String[] resultRow;
+    LinkedList<String[]> resultList = new LinkedList<String[]>;
     Connection conn = datSrc.getConnection();
     PreparedStatement checkToken = conn.prepareStatement(checkTokenStr);
-    //in case there is more than 1 will not crash the backend
-    //would never be more than 1 unless there were an attack
-    checkToken.setFetchSize(MAX_FETCH_SIZE_TOKEN);
+
     checkToken.setString(1,tokenid);
 
     ResultSet tokenResult = checkToken.executeQuery();
+    if(!tokenResult.isBeforeFirst())//no results
+    {
+      resultRow = new String[RESULT_SIZE];
+      resultRow[0] = "";
+      resultRow[1] = "invalid";
+      resultRow[2] = "";
+      resultList.addLast(resultRow);
+    }
+    else//results
+    {
+      while(tokenResult.next())
+      {
+        resultRow = new String[RESULT_SIZE];
+        resultList[0] = tokenResult.getString(USERID_COLUMN);
+        resultList[1] = tokenResult.getTimestamp(TIMESTAMP_COLUMN).toString();
+        resultList[2] = tokenResult.getBoolean(LOGOUT_COLUMN).toString();
+        resultList.addLast(resultRow);
 
-    if(tokenResult.isBeforeFirst()){//there is a result
-
-      //acceptable length is up to 8 hours ago not any earlier
-      Timestamp resultTime = tokenResult.getTimestamp(TIMESTAMP_COLUMN);
-      long currentMillis = System.currentTimeMillis();
-      long differenceMillis = currentMillis - resultTime.getTime();
-
-      if(tokenResult.getBoolean(LOGOUT_COLUMN) == false  &&
-        differenceMillis <= MAX_SESSION_TIME){
-          validResult = true;
       }
+
     }
-    String[] resultList = new String[2];
-    if(validResult){
-      userId = tokenResult.getString(USERID_COLUMN);
-      resultList[0] = "true";
-    }else{
-      resultList[0] = "false";
-    }
-    resultList[1] = userId;
+
 
       return resultList;
 
